@@ -1,0 +1,29 @@
+﻿@model FileSync.Models.HomeViewModel
+
+@{
+    var pageIcon = Model.ParentFolder == null ? "home" : "folder-open";
+    var iconDescription = Model.ParentFolder == null ? "Home" : Model.ParentFolder.Name;
+    ViewBag.Title = "Home Page";
+    ViewBag.PageIcon = pageIcon;
+    ViewBag.PageIconDescription = iconDescription;
+}
+
+
+<div class="container">
+    <div>
+        @foreach (var folder in Model.Folders)
+        {
+            <div class="fs-folder">
+                <span class="glyphicon glyphicon-folder-open"></span>
+                @Html.ActionLink(folder.Name, "Index", new { @parentFolderId = folder.Id })
+            </div>
+        }
+        @foreach (var file in Model.Files)
+        {
+            <div class="fs-folder">
+                <span class="glyphicon glyphicon-file"></span>
+                <span>@file.Name</span>
+            </div>
+        }
+    </div>
+</div>

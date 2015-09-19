@@ -1,0 +1,55 @@
+﻿@model FileSync.Models.RegisterViewModel
+@{
+    ViewBag.PageIcon = "lock";
+    ViewBag.PageIconDescription = "Register";
+    ViewBag.Title = "Register";
+}
+
+<h2 class="fs-login-title">@ViewBag.Title.</h2>
+<div style="display:flex; justify-content:center;">
+    <div class="fs-box">
+        <div>
+            <section id="registerForm">
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                        <div>
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Place, new { @class = "control-label" })
+                        <div>
+                            @Html.TextBoxFor(m => m.Place, new { @class = "form-control", @id = "place" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                        <div>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+                        <div>
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <input type="submit" class="btn btn-default" value="Register" />
+                        </div>
+                    </div>
+                }
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/autocomplete/placesAutoComplete.js")
+    @Scripts.Render("~/bundles/jqueryval")
+}

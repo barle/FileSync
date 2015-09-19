@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.PageIcon = "cloud";
+    ViewBag.PageIconDescription = "Manage";
+    ViewBag.Title = "Manage";
+}
+
+<div class="fs-manage-icons-container">
+    <div>
+        @Html.ActionLink(" ", "ManageUsers", new { }, new { @class = "glyphicon glyphicon-user fs-manage-icon fs-icon-button fs-no-decoration" })
+        <span class="fs-icon-description">Manage Users</span>
+    </div>
+    <div>
+        @Html.ActionLink(" ", "ManageGroups", new { }, new { @class = "glyphicon glyphicon-star fs-manage-icon fs-icon-button fs-no-decoration" })
+        <span class="fs-icon-description">Manage Groups</span>
+    </div>
+    <div>
+        @Html.ActionLink(" ", "ManageFolders", new { }, new { @class = "glyphicon glyphicon-folder-open fs-manage-icon fs-icon-button fs-no-decoration" })
+        <span class="fs-icon-description">Manage Folders</span>
+</div>
+</div>
+
+

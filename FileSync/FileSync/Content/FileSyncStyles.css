@@ -1,0 +1,124 @@
+﻿
+/******** Navbar ********/
+.fs-navbar{
+    background-color: rgb(240, 240 ,240);
+    color: rgba(0,0,0,0.7);
+    height: 130px;
+    box-shadow: 1px 2px 1px 0px rgba(0,0,0,0.3);
+}
+
+.fs-navbar .container{
+    height: 100%;
+}
+
+.fs-navbar .container .fs-nav-item{
+    top: 50%;
+    position: relative;
+    transform: translateY(-50%);
+}
+
+.fs-navbar-icon-container{
+    margin: 0 20px;
+    float:right;
+    color: rgba(0,0,0,0.7);
+}
+
+.fs-navbar-icon{
+    font-size: 70px;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.container.body-content{
+    margin-top:20px;
+}
+
+/******** Manage Page ********/
+
+.fs-manage-icons-container{
+    display: flex; 
+    flex-flow:row wrap; 
+    justify-content: space-around;
+    margin: 50px 0;
+}
+
+.fs-manage-icon{
+    font-size: 150px;
+}
+
+
+/******** Login ********/
+@font-face{
+    font-family: loginFont;
+    src: url(/fonts/skim-milk.medium.ttf);
+}
+
+.fs-box{
+    background:rgba(0,0,0,0.1);
+    border-radius:5px;
+    box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.3);
+    padding: 10px 30px;
+}
+
+.fs-login-title{
+    text-align:center; 
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    font-family: loginFont;
+}
+
+/******** Autocomplete ********/
+/* highlight results */
+.ui-autocomplete span.hl_results {
+    background-color: #ffff66;
+}
+ 
+/* loading - the AJAX indicator */
+.fs-autocomplete-loading {
+    background: white url('~/Content/img/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+
+.ui-helper-hidden-accessible { display:none; }
+ 
+/* scroll results */
+.ui-autocomplete {
+    max-height: 250px;
+    width: 400px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding for vertical scrollbar */
+    padding-right: 5px;
+    padding-left: 5px !important;
+    list-style: none;
+    background: white;
+    border: 1px solid rgba(0,0,0,0.3);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);
+}
+ 
+.ui-autocomplete li {
+    font-size: 16px;
+}
+
+.ui-autocomplete li.ui-state-focus{
+    background: rgba(0,0,0,0.1);
+}
+
+/******** General ********/
+.fs-no-decoration{
+    text-decoration: none !important;
+}
+
+.fs-icon-description{
+    display: block;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.fs-icon-button{
+    color: rgba(0,0,0,0.6);
+    cursor: pointer;
+}
+
+.fs-icon-button:hover{
+    color: rgba(0,0,0,0.3);
+}

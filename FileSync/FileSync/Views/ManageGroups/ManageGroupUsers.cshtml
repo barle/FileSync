@@ -1,0 +1,38 @@
+﻿@model FileSync.Models.Group
+
+@{
+    ViewBag.PageIcon = "star";
+    ViewBag.PageIconDescription = Model.DisplayName;
+    ViewBag.Title = Model.DisplayName;
+}
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.DisplayName)
+        </th>
+        <th>
+            Remove
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Users)
+    {
+        <tr>
+            <td>
+                <span class="glyphicon glyphicon-user fs-icon"></span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @using (Html.BeginForm("RemoveUserFromGroup", "ManageGroups", new { groupId = Model.Id, userId = item.Id }, FormMethod.Post))
+                {
+                    <button type="submit" class="glyphicon glyphicon-remove fs-no-decoration fs-icon-button"></button>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
