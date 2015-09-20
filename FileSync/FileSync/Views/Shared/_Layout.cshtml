@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-fixed-top fs-navbar">
+    <nav class="navbar navbar-fixed-top fs-navbar">
         <div class="container">
             @Html.ActionLink("File Sync", "Index", "Home", new { area = "" }, new { @class = "navbar-brand fs-nav-item fs-no-decoration" })
 
@@ -37,7 +37,7 @@
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />

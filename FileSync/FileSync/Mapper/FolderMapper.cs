@@ -43,7 +43,8 @@ namespace FileSync.Mapper
                     Id = Guid.NewGuid().ToString(),
                     Name = file.Name,
                     ParentFolderId = folder.Id,
-                    Path = folder.Path + "/" + file.Name
+                    Path = folder.Path + "/" + file.Name,
+                    Extension = file.Extension
                 };
                 filesToAdd.Add(fileModel);
             }

@@ -1,8 +1,16 @@
 ﻿@model FileSync.Models.File
 
+@{
+    var videoTypes = new[] { ".mp4", ".mpeg", ".m4v", ".ogg", ".webm", ".wmv" };
+    var isVideo = Model.Extension != null && videoTypes.Contains(Model.Extension.ToLower());
+    var serverEndPoint = isVideo ? "/Home/ShowVideoFile/" : "/Home/DownloadFile/";
+    serverEndPoint += Model.Id;
+    var fileIcon = isVideo ? "facetime-video" : "file";
+}
+
 <div class="fs-file" title="@Model.Name">
-    <a href="/Home/DownloadFile/@Model.Id">
-        <span class="fs-file-icon glyphicon glyphicon-file"></span>
+    <a href="@serverEndPoint">
+        <span class="fs-file-icon glyphicon glyphicon-@fileIcon"></span>
         <span class="fs-file-description">@Model.Name</span>
     </a>
 </div>

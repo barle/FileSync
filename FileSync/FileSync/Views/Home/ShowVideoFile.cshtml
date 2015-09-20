@@ -1,0 +1,18 @@
+﻿@model FileSync.Models.ShowVideoViewModel
+
+@{
+    ViewBag.Title = "Video";
+    ViewBag.PageIcon = "facetime-video";
+    ViewBag.PageIconDescription = "Video";
+    ViewBag.ReturnUrl = Model.ReturnUrl;
+}
+
+<div class="container fs-video">
+    <header>
+        <h3>@Model.VideoName</h3>
+    </header>
+    <video controls width="500" height="300" autoplay>
+        <source src="@Model.VideoPath" type="video/@Model.VideoType" />
+        sorry, your browser does not support HTML5 video tags
+    </video>
+</div>

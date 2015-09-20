@@ -21,6 +21,9 @@ namespace FileSync.Models
         public Folder ParentFolder { get; set; }
 
         public string ParentFolderId { get; set; }
+
+        public string Extension { get; set; }
+
         public ICollection<FileSyncUser> AuthorizedUsers { get; set; }
         public ICollection<Group> AuthorizedGroups { get; set; }
     }

@@ -13,16 +13,17 @@ namespace FileSync.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public ActionResult Index(string parentFolderId)
+        [ItemAuthorize("folder",true)]
+        public ActionResult Index(string id)
         {
-            if (string.IsNullOrWhiteSpace(parentFolderId))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 var rootFolders = FileSyncDal.GetRootFolders(User.Identity);
                 var viewModel = new HomeViewModel(){Folders = rootFolders};
                 return View(viewModel);
             }
 
-            var parentFolder = FileSyncDal.GetFolder(User.Identity, parentFolderId);
+            var parentFolder = FileSyncDal.GetFolder(User.Identity, id);
             if (parentFolder == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var homeViewModel = new HomeViewModel()
@@ -49,5 +50,26 @@ namespace FileSync.Controllers
             return File(file.Path, System.Net.Mime.MediaTypeNames.Application.Octet, file.Name);
         }
 
+        [ItemAuthorize("file")]
+        public ActionResult ShowVideoFile(string id)
+        {
+            if(id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var videoFile = FileSyncDal.GetFile(User.Identity, id);
+            if(videoFile == null)
+                return HttpNotFound();
+
+            var videoType = videoFile.Extension == ".wmv" ? "x-ms-wmv" : videoFile.Extension.ToLower().Substring(1);
+            var model = new ShowVideoViewModel()
+            {
+                VideoPath = "../DownloadFile/" + videoFile.Id,
+                VideoName = videoFile.Name,
+                VideoType = videoType,
+                ReturnUrl = "Home/Index/" + videoFile.ParentFolderId
+            };
+
+            return View(model);
+        }
     }
 }

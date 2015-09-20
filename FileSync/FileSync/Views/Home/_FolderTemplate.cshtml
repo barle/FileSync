@@ -1,7 +1,7 @@
 ﻿@model FileSync.Models.Folder
 
 <div class="fs-folder" title="@Model.Name">
-    <a href="/Home?parentFolderId=@(string.IsNullOrWhiteSpace(Model.Id) ? null : Model.Id)">
+    <a href="/Home/Index/@(string.IsNullOrWhiteSpace(Model.Id) ? null : Model.Id)">
         <span class="fs-folder-icon glyphicon glyphicon-folder-open"></span>
         <span class="fs-folder-description">@Model.Name</span>
     </a>
