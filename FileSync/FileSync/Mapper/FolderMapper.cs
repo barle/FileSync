@@ -28,14 +28,18 @@ namespace FileSync.Mapper
                 directoryInfo.Create();
             }
             _folder.Id = Guid.NewGuid().ToString();
+            _folder.InsertionDate = DateTime.Now;
             foldersToAdd.Add(_folder);
-            MapFolder(directoryInfo, _folder, foldersToAdd, filesToAdd);
+            var folderSize = MapFolder(directoryInfo, _folder, foldersToAdd, filesToAdd);
+            _folder.Size = folderSize;
             FileSyncDal.AddFolders(foldersToAdd);
             FileSyncDal.AddFiles(filesToAdd);
         }
 
-        private void MapFolder(DirectoryInfo directoryInfo, Folder folder, List<Folder> foldersToAdd, List<FileSyncFile> filesToAdd)
+        // returns the folder size and add to the foldersToAdd list all the inside folders and same for the files to the filesToAdd list
+        private long MapFolder(DirectoryInfo directoryInfo, Folder folder, List<Folder> foldersToAdd, List<FileSyncFile> filesToAdd)
         {
+            var size = 0L;
             foreach (var file in directoryInfo.GetFiles())
             {
                 var fileModel = new FileSyncFile()
@@ -48,6 +52,7 @@ namespace FileSync.Mapper
                     InsertionDate = DateTime.Now
                 };
                 filesToAdd.Add(fileModel);
+                size += file.Length;
             }
             foreach (var directory in directoryInfo.GetDirectories())
             {
@@ -56,12 +61,15 @@ namespace FileSync.Mapper
                     Id = Guid.NewGuid().ToString(),
                     Name = directory.Name,
                     ParentFolderId = folder.Id,
-                    Path = folder.Path + "/" + directory.Name
+                    Path = folder.Path + "/" + directory.Name,
+                    InsertionDate = DateTime.Now,
                 };
                 foldersToAdd.Add(folderModel);
-                MapFolder(directory, folderModel, foldersToAdd, filesToAdd);
+                var folderSize = MapFolder(directory, folderModel, foldersToAdd, filesToAdd);
+                folderModel.Size = folderSize;
+                size += folderSize;
             }
-
+            return size;
         }
     }
 }

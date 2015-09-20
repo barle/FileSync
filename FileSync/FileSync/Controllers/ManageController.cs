@@ -29,5 +29,10 @@ namespace FileSync.Controllers
         {
             return RedirectToAction("Index", "ManageFolders");
         }
+
+        public ActionResult Statistics()
+        {
+            return RedirectToAction("Index", "Statistics");
+        }
     }
 }

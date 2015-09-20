@@ -4,3 +4,5 @@ FileSync/FileSync/App_Data/FileSync_log.ldf
 *.dll
 *.pdb
 *.cache
+*.dll
+*.pdb

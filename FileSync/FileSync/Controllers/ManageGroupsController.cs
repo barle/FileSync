@@ -13,7 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace FileSync.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ManageGroupsController : Controller
     {
 
