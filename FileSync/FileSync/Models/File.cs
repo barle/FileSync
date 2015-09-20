@@ -24,6 +24,8 @@ namespace FileSync.Models
 
         public string Extension { get; set; }
 
+        public DateTime InsertionDate { get; set; }
+
         public ICollection<FileSyncUser> AuthorizedUsers { get; set; }
         public ICollection<Group> AuthorizedGroups { get; set; }
     }

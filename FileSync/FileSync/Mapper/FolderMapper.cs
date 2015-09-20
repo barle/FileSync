@@ -44,7 +44,8 @@ namespace FileSync.Mapper
                     Name = file.Name,
                     ParentFolderId = folder.Id,
                     Path = folder.Path + "/" + file.Name,
-                    Extension = file.Extension
+                    Extension = file.Extension,
+                    InsertionDate = DateTime.Now
                 };
                 filesToAdd.Add(fileModel);
             }
