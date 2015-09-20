@@ -254,6 +254,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Statistics\daysToFilesGraph.js" />
+    <Content Include="Scripts\Statistics\filesSizePie.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -311,6 +312,7 @@
     <Content Include="Views\ManageUsers\Index.cshtml" />
     <Content Include="Views\Home\ShowVideoFile.cshtml" />
     <Content Include="Views\Statistics\Index.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
