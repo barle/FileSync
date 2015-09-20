@@ -395,6 +395,28 @@ namespace FileSync.DAL
             }
         }
 
+        public static IEnumerable<object> GetFilesPerDays(int daysBack)
+        {
+            var dateBack = DateTime.Now.AddDays(-daysBack).Date;
+            using (var db = new FileSyncDbContext())
+            {
+                var dayToFilesCount = (from file in db.Files
+                                       where file.InsertionDate >= dateBack
+                                       group file by DbFunctions.TruncateTime(file.InsertionDate)
+                                           into dateToFiles
+                                           select new { date = dateToFiles.Key.Value, count = dateToFiles.Count() }).ToList();
+                for (int i = 0; i <= daysBack; i++)
+                {
+                    var date = DateTime.Now.AddDays(-i).Date;
+                    if (!dayToFilesCount.Any(d => d.date.Equals(date)))
+                    {
+                        dayToFilesCount.Add(new { date = date, count = 0 });
+                    }
+                }
+                return dayToFilesCount.OrderBy(d => d.date).Select(d=> new {date = d.date.ToString("dd/MM"), count = d.count}).ToList();
+            }
+        }
+
         private static IEnumerable<T> GetAuthorized<T>(IIdentity identity, IEnumerable<T> itemsToAuthorize) where T : IAuthorizableItem
         {
             if (identity == null) return Enumerable.Empty<T>();
