@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using FileSync.DAL;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +16,10 @@ namespace FileSync.Controllers
             return View();
         }
 
-        public ActionResult GetFilesPerDays()
+        public ActionResult GetFilesPerDays(int days)
         {
-            var results = new List<object>();
-            //foreach
-            results.Add(new { x = "1", y = "10" });
-            results.Add(new { x = "2", y = "30" });
-            results.Add(new { x = "3", y = "25" });
-            results.Add(new { x = "4", y = "35" });
-            results.Add(new { x = "5", y = "3" });
-
-
-            return Json(results.ToArray(), JsonRequestBehavior.AllowGet);
+            var daysToFilesCount = FileSyncDal.GetFilesPerDays(days);
+            return Json(daysToFilesCount, JsonRequestBehavior.AllowGet);
         }
     }
 }
