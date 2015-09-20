@@ -50,6 +50,11 @@ namespace FileSync.Controllers
             return File(file.Path, System.Net.Mime.MediaTypeNames.Application.Octet, file.Name);
         }
 
+        public ActionResult About()
+        {
+            return View();
+        }
+
         [ItemAuthorize("file")]
         public ActionResult ShowVideoFile(string id)
         {

@@ -200,3 +200,35 @@ body{
     transform: scale(1.2);
     transition: all 0.25s ease-out;
 }
+
+
+/******** Statistics ********/
+.axis path {
+        fill: none;
+        stroke: #777;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        font-family: Lato;
+        font-size: 13px;
+    }
+
+/******** About ********/
+.newspaper {
+        -webkit-column-count: 3; /* Chrome, Safari, Opera */
+        -moz-column-count: 3; /* Firefox */
+        column-count: 3;
+        -webkit-column-gap: 40px; /* Chrome, Safari, Opera */
+        -moz-column-gap: 40px; /* Firefox */
+        column-gap: 40px;
+        -webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
+        -moz-column-rule-style: solid; /* Firefox */
+        column-rule-style: solid;
+        -webkit-column-rule-width: 1px; /* Chrome, Safari, Opera */
+        -moz-column-rule-width: 1px; /* Firefox */
+        column-rule-width: 1px;
+        -webkit-column-rule-color: lightblue; /* Chrome, Safari, Opera */
+        -moz-column-rule-color: lightblue; /* Firefox */
+        column-rule-color: lightblue;
+    }

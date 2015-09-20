@@ -1,7 +1,7 @@
 ﻿document.onload = _onload();
 
 function _onload() {
-    var promise = $.ajax("http://localhost:3771/Statistics/GetFilesPerDays?days=10").promise();
+    var promise = $.ajax("http://localhost:3771/Statistics/GetFoldersSizes").promise();
     promise.then(_initGraph);
 }
 
@@ -10,10 +10,6 @@ function _initGraph(data) {
     h = 250,                            
     r = 125,                            
     color = d3.scale.category20c();     
-
-        data = [{ "label": "one", "value": 20 },
-                { "label": "two", "value": 50 },
-                { "label": "three", "value": 30 }];
 
         var vis = d3.select("#filesSizePie")
             .append("svg:svg")              
@@ -27,7 +23,7 @@ function _initGraph(data) {
             .outerRadius(r);
 
         var pie = d3.layout.pie()           
-            .value(function (d) { return d.value; });    
+            .value(function (d) { return d.size; });    
 
         var arcs = vis.selectAll("g.slice")     
             .data(pie)                          
@@ -46,6 +42,6 @@ function _initGraph(data) {
                     d.outerRadius = r;
                     return "translate(" + arc.centroid(d) + ")";        
                 })
-            .attr("text-anchor", "middle")                          
-            .text(function (d, i) { return data[i].label; });        
+            //.attr("text-anchor", "middle")                          
+            .text(function (d, i) { return data[i].folderName; });        
 }

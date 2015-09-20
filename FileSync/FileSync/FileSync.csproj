@@ -312,6 +312,7 @@
     <Content Include="Views\ManageUsers\Index.cshtml" />
     <Content Include="Views\Home\ShowVideoFile.cshtml" />
     <Content Include="Views\Statistics\Index.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
