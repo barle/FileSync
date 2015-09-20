@@ -1,28 +1,37 @@
-﻿
-<!--<div class="container">
+﻿@{
+    ViewBag.PageIcon = "signal";
+    ViewBag.PageIconDescription = "Statistics";
+    ViewBag.Title = "Statistics";
+    ViewBag.ReturnUrl = "Manage";
+}
 
-    <div class="jumbotron">-->
-        
+<div style="display: flex; flex-flow: row wrap; justify-content: flex-start;">
+    <div style="margin:0px 150px 10px 0px">
+        <h2>Number of files in the last 10 days:</h2>
         <svg id="daysToFilesCount" width="450" height="250"></svg>
+    </div>
+    <div>
+        <h2>Root table size:</h2>
+        <svg id="filesSizePie" width="450" height="250"></svg>
+    </div>
+</div>
 
-<!--    </div>
-
-</div>-->
 <style>
     .axis path {
         fill: none;
         stroke: #777;
         shape-rendering: crispEdges;
     }
+
     .axis text {
         font-family: Lato;
         font-size: 13px;
     }
-
 </style>
 
 @section Scripts {
     @Scripts.Render("http://d3js.org/d3.v3.min.js")
     @Scripts.Render("~/Scripts/Statistics/daysToFilesGraph.js")
+    @Scripts.Render("~/Scripts/Statistics/filesSizePie.js")
     @Scripts.Render("~/bundles/jqueryval")
 }
