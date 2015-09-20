@@ -174,7 +174,6 @@
     <Compile Include="Authorization\ItemAuthorizeAttribute.cs" />
     <Compile Include="Authorization\ItemAuthorizer.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\ManageFoldersController.cs" />
     <Compile Include="Controllers\ManageGroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -185,10 +184,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509151134417_InitialCreate.cs" />
-    <Compile Include="Migrations\201509151134417_InitialCreate.Designer.cs">
-      <DependentUpon>201509151134417_InitialCreate.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Mapper\FolderMapper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\File.cs" />
@@ -262,8 +258,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -291,11 +285,6 @@
     <Content Include="Views\ManageGroups\Details.cshtml" />
     <Content Include="Views\ManageGroups\Edit.cshtml" />
     <Content Include="Views\ManageGroups\Index.cshtml" />
-    <Content Include="Views\Files\Create.cshtml" />
-    <Content Include="Views\Files\Delete.cshtml" />
-    <Content Include="Views\Files\Details.cshtml" />
-    <Content Include="Views\Files\Edit.cshtml" />
-    <Content Include="Views\Files\Index.cshtml" />
     <Content Include="Views\ManageFolders\Create.cshtml" />
     <Content Include="Views\ManageFolders\Delete.cshtml" />
     <Content Include="Views\ManageFolders\Details.cshtml" />
@@ -303,6 +292,8 @@
     <Content Include="Views\ManageFolders\Index.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\ManageGroups\ManageGroupUsers.cshtml" />
+    <Content Include="Views\Home\_FileTemplate.cshtml" />
+    <Content Include="Views\Home\_FolderTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -313,11 +304,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201509151134417_InitialCreate.resx">
-      <DependentUpon>201509151134417_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

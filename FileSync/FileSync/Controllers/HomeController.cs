@@ -12,16 +12,16 @@ namespace FileSync.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public ActionResult Index(int? parentFolderId)
+        public ActionResult Index(string parentFolderId)
         {
-            if (parentFolderId == null)
+            if (string.IsNullOrWhiteSpace(parentFolderId))
             {
                 var rootFolders = FileSyncDal.GetRootFolders(User.Identity);
                 var viewModel = new HomeViewModel(){Folders = rootFolders};
                 return View(viewModel);
             }
 
-            var parentFolder = FileSyncDal.GetFolder(User.Identity, parentFolderId.Value);
+            var parentFolder = FileSyncDal.GetFolder(User.Identity, parentFolderId);
             if (parentFolder == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var homeViewModel = new HomeViewModel()
@@ -33,18 +33,19 @@ namespace FileSync.Controllers
             return View(homeViewModel);
         }
 
-        public ActionResult About()
+        public ActionResult DownloadFile(string id)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var file = FileSyncDal.GetFile(User.Identity, id);
+            if(file == null)
+            {
+                return HttpNotFound();
+            }
+            return File(file.Path, System.Net.Mime.MediaTypeNames.Application.Octet, file.Name);
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

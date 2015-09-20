@@ -10,20 +10,19 @@
 
 
 <div class="container">
-    <div>
+    <div class="fs-folder-content">
+        @if (Model.ParentFolder != null)
+        {
+            @Html.Partial("_FolderTemplate", 
+            new FileSync.Models.Folder() { Id = string.IsNullOrWhiteSpace(Model.ParentFolder.ParentFolderId) ? null : Model.ParentFolder.ParentFolderId, Name = ".." })  
+        }
         @foreach (var folder in Model.Folders)
         {
-            <div class="fs-folder">
-                <span class="glyphicon glyphicon-folder-open"></span>
-                @Html.ActionLink(folder.Name, "Index", new { @parentFolderId = folder.Id })
-            </div>
+            @Html.Partial("_FolderTemplate", folder)
         }
         @foreach (var file in Model.Files)
         {
-            <div class="fs-folder">
-                <span class="glyphicon glyphicon-file"></span>
-                <span>@file.Name</span>
-            </div>
+            @Html.Partial("_FileTemplate", file)
         }
     </div>
 </div>

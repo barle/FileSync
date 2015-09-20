@@ -15,12 +15,13 @@ namespace FileSync.Models
             SubFolders = new List<Folder>();
             Files = new List<File>();
         }
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public Folder ParentFolder { get; set; }
+        public string Path { get; set; }
 
         [DisplayName("Parent Folder")]
-        public int? ParentFolderId { get; set; }
+        public string ParentFolderId { get; set; }
         public ICollection<Folder> SubFolders { get; set; }
         public ICollection<File> Files { get; set; }
         public ICollection<FileSyncUser> AuthorizedUsers { get; set; }

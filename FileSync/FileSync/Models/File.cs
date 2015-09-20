@@ -12,7 +12,7 @@ namespace FileSync.Models
             AuthorizedUsers = new List<FileSyncUser>();
             AuthorizedGroups = new List<Group>();
         }
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
 
@@ -20,7 +20,7 @@ namespace FileSync.Models
 
         public Folder ParentFolder { get; set; }
 
-        public int ParentFolderId { get; set; }
+        public string ParentFolderId { get; set; }
         public ICollection<FileSyncUser> AuthorizedUsers { get; set; }
         public ICollection<Group> AuthorizedGroups { get; set; }
     }

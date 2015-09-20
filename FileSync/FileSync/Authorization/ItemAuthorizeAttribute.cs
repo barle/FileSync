@@ -10,6 +10,13 @@ namespace FileSync.Authorization
 {
     public class ItemAuthorizeAttribute : AuthorizeAttribute
     {
+        private string _itemType;
+
+        public ItemAuthorizeAttribute(string itemType) : base()
+        {
+            _itemType = itemType;
+        }
+
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             var baseResult = base.AuthorizeCore(httpContext);
@@ -18,14 +25,14 @@ namespace FileSync.Authorization
 
             var identity = httpContext.User.Identity;
             IAuthorizableItem item = null;
-            if(httpContext.Request.Params.Keys.OfType<string>().Contains("fileId"))
+            if(_itemType == "file")
             {
-                var fileId = int.Parse(httpContext.Request.Params.Get("fileId"));
+                var fileId = httpContext.Request.RequestContext.RouteData.Values["id"].ToString();
                 item = FileSyncDal.GetFile(identity, fileId);
             }
-            else if(httpContext.Request.Params.Keys.OfType<string>().Contains("folderId"))
+            else if(_itemType == "folder")
             {
-                var folderId = int.Parse(httpContext.Request.Params.Get("folderId"));
+                var folderId = httpContext.Request.RequestContext.RouteData.Values["id"].ToString();
                 item = FileSyncDal.GetFolder(identity, folderId);
             }
             

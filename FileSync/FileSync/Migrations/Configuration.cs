@@ -10,6 +10,7 @@ namespace FileSync.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "FileSync.Models.FileSyncDbContext";
         }
 

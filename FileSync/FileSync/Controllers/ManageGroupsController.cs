@@ -137,8 +137,7 @@ namespace FileSync.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Group group = FileSyncDal.GetGroup(id);
-            FileSyncDal.RemoveGroup(group);
+            FileSyncDal.RemoveGroup(id);
             return RedirectToAction("Index");
         }
 

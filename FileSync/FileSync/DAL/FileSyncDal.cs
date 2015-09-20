@@ -16,7 +16,7 @@ namespace FileSync.DAL
         const string FILE_INCLUDES = "AuthorizedUsers,AuthorizedGroups,ParentFolder";
         const string GROUP_INCLUDES = "Users,SubGroups,ParentGroups,AllowedFolders,AllowedFiles";
 
-        public static File GetFile(IIdentity identity, int fileId)
+        public static File GetFile(IIdentity identity, string fileId)
         {
             using(var db = new FileSyncDbContext())
             {
@@ -28,7 +28,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static Folder GetFolder(IIdentity identity, int folderId)
+        public static Folder GetFolder(IIdentity identity, string folderId)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -81,6 +81,15 @@ namespace FileSync.DAL
             }
         }
 
+        public static void AddFiles(IEnumerable<File> files)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                db.Files.AddRange(files);
+                db.SaveChanges();
+            }
+        }
+
         public static void SaveEditFile(File file)
         {
             using (var db = new FileSyncDbContext())
@@ -107,6 +116,14 @@ namespace FileSync.DAL
                 db.SaveChanges();
             }
         }
+        public static void AddFolders(IEnumerable<Folder> folders)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                db.Folders.AddRange(folders);
+                db.SaveChanges();
+            }
+        }
 
         public static void SaveEditFolder(Folder folder)
         {
@@ -117,12 +134,33 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveFolder(Folder folder)
+        public static void RemoveFolder(string folderId)
         {
             using (var db = new FileSyncDbContext())
             {
-                db.Folders.Remove(folder);
+                var folder = (from f in db.Folders where f.Id == folderId select f).FirstOrDefault();
+                if (folder == null)
+                    return;
+
+                var allFolders = (from f in db.Folders select f).ToList();
+                var foldersToRemove = new List<Folder>(){folder};
+                GetAllFoldersInHirarchy(folder, allFolders, foldersToRemove);
+                db.Folders.RemoveRange(foldersToRemove);
                 db.SaveChanges();
+            }
+        }
+
+        private static void GetAllFoldersInHirarchy(Folder folder, List<Folder> allFolders, List<Folder> foldersToRemove)
+        {
+            var subFolders = allFolders.Where(f => f.ParentFolderId == folder.Id).ToList();
+            var diffedFolders = subFolders.Except(foldersToRemove);
+            foreach (var f in diffedFolders)
+            {
+                if (!foldersToRemove.Contains(f))
+                {
+                    foldersToRemove.Add(f);
+                    GetAllFoldersInHirarchy(f, allFolders, foldersToRemove);
+                }
             }
         }
 
@@ -200,10 +238,16 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveGroup(Group group)
+        public static void RemoveGroup(string groupId)
         {
             using (var db = new FileSyncDbContext())
             {
+                var group = (from g in db.Groups
+                            where g.Id == groupId
+                            select g).FirstOrDefault();
+                if (group == null)
+                    return;
+
                 db.Groups.Remove(group);
                 db.SaveChanges();
             }
@@ -214,7 +258,7 @@ namespace FileSync.DAL
             if (identity == null) return Enumerable.Empty<T>();
 
             var authorizedItems = itemsToAuthorize.Where(item => ItemAuthorizer.IsAuthorized(identity, item)).ToList();
-            return itemsToAuthorize;
+            return authorizedItems;
         }
     }
 

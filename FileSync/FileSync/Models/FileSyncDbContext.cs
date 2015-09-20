@@ -71,7 +71,8 @@ namespace FileSync.Models
             modelBuilder.Entity<Folder>()
                 .HasMany<File>(folder => folder.Files)
                 .WithRequired(file => file.ParentFolder)
-                .HasForeignKey(file => file.ParentFolderId);
+                .HasForeignKey(file => file.ParentFolderId)
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<Folder>()
                 .HasMany<Folder>(parentFolder => parentFolder.SubFolders)

@@ -17,12 +17,12 @@ namespace FileSync.Controllers
 
         public ActionResult ManageUsers()
         {
-            return View();
+            return RedirectToAction("Index", "ManageUsers");
         }
 
         public ActionResult ManageGroups()
         {
-            return View();
+            return RedirectToAction("Index", "ManageGroups");
         }
 
         public ActionResult ManageFolders()

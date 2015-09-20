@@ -67,19 +67,12 @@
 }
 
 /******** Autocomplete ********/
-/* highlight results */
-.ui-autocomplete span.hl_results {
-    background-color: #ffff66;
-}
- 
-/* loading - the AJAX indicator */
 .fs-autocomplete-loading {
     background: white url('~/Content/img/ui-anim_basic_16x16.gif') right center no-repeat;
 }
 
 .ui-helper-hidden-accessible { display:none; }
  
-/* scroll results */
 .ui-autocomplete {
     max-height: 250px;
     width: 400px;
@@ -103,7 +96,73 @@
     background: rgba(0,0,0,0.1);
 }
 
+/******** Home ********/
+.fs-folder-content{
+    padding: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.fs-folder,
+.fs-file{
+    margin: 15px;
+    height: 100px;
+    width: 100px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 3px;
+    padding: 5px;
+    box-shadow: 2px 2px 4px -1px rgba(0,0,0,0.2);
+    cursor: pointer;
+    background: rgba(0,0,0,0.05);
+    color: rgb(145, 145, 145);
+    text-decoration: none !important;
+    transition: all 0.25s ease-in;
+}
+
+.fs-folder a,
+.fs-file a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.fs-folder:hover,
+.fs-file:hover{
+    transform: scale(1.5);
+    background: rgba(0,0,0,0.1);
+    transition: all 0.25s ease-out;
+}
+
+.fs-folder .fs-folder-icon,
+.fs-file .fs-file-icon{
+    margin-bottom: 10px;
+    font-size: 56px;
+    display: block;
+    text-align: center;
+}
+
+.fs-file .fs-file-icon{
+    color: rgb(0, 148, 255);
+}
+
+.fs-folder .fs-folder-description,
+.fs-file .fs-file-description{
+    font-size:14px;
+    display: block;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: nowrap;
+    text-decoration: none;
+    color: rgb(70, 68, 68);
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 /******** General ********/
+body{
+    background: rgba(0,0,0,0.05)
+}
+
 .fs-no-decoration{
     text-decoration: none !important;
 }
