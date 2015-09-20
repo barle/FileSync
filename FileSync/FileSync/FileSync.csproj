@@ -181,6 +181,7 @@
     <Compile Include="Controllers\ManageAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PlacesController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="DAL\FileSyncDal.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -252,6 +253,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Statistics\daysToFilesGraph.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -308,6 +310,7 @@
     <Content Include="Views\ManageUsers\Edit.cshtml" />
     <Content Include="Views\ManageUsers\Index.cshtml" />
     <Content Include="Views\Home\ShowVideoFile.cshtml" />
+    <Content Include="Views\Statistics\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
