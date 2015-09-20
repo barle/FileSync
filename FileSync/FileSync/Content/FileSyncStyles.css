@@ -176,8 +176,27 @@ body{
 .fs-icon-button{
     color: rgba(0,0,0,0.6);
     cursor: pointer;
+    border: none;
+    background: none;
+    box-shadow: none;
 }
 
 .fs-icon-button:hover{
     color: rgba(0,0,0,0.3);
+}
+
+.fs-icon-button.fs-fab{
+    border-radius: 45px;
+    height: 45px;
+    width: 45px;
+    text-align: center;
+    box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgb(240, 240, 240);
+    transition: all 0.25s ease-in;
+}
+
+.fs-icon-button.fs-fab:hover{
+    transform: scale(1.2);
+    transition: all 0.25s ease-out;
 }

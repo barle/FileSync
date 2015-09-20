@@ -26,20 +26,19 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<FileSyncUser> GetUsersBySearch(string groupName, string userName, int numOfGroups)
+        public static IEnumerable<FileSyncUser> GetUsersBySearch(UserSearchParams searchParams)
         {
             using (var db = new FileSyncDbContext())
             {
                 var users = (from u in db.Users
-                             from g in db.Groups
-                             where
-                             (((groupName == null || groupName == string.Empty) && u.UserGroups.Count == 0) || u.UserGroups.Any(g1 => g1.Id == g.Id))
-                             && (groupName == null || groupName == string.Empty || g.DisplayName.Contains(groupName))
-                             && u.UserName.Contains(userName)
-                             group u by u into groupedUsers
-                             where (groupedUsers.Key.UserGroups.Count() >= numOfGroups)
-                             select groupedUsers.Key
-                             ).ToList();
+                              from g in db.Groups.Where(g2 => u.UserGroups.Any(g3 => g2.Id == g3.Id)).DefaultIfEmpty()
+                              where
+                              ((searchParams.GroupName == null || searchParams.GroupName == string.Empty) || (g != null && g.DisplayName.Contains(searchParams.GroupName))) &&
+                              (u.UserName.Contains(searchParams.Name))
+                              group u by u into groupedUsers
+                              where (groupedUsers.Key.UserGroups.Count() >= searchParams.GroupsCount)
+                              select groupedUsers.Key
+                                  ).ToList();
                 return users;
             }
         }
@@ -236,6 +235,94 @@ namespace FileSync.DAL
             }
         }
 
+        public static void RemoveUserFromFolder(string folderId, string userId)
+        {
+            if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(userId))
+                return;
+
+            using (var db = new FileSyncDbContext())
+            {
+                var folder = db.Folders.Find(folderId);
+                if (folder == null)
+                    return;
+
+                var user = db.Users.Find(userId);
+                if (user == null)
+                    return;
+
+                db.Entry(folder).Collection("AuthorizedUsers").Load();
+
+                folder.AuthorizedUsers.Remove(user);
+                db.SaveChanges();
+            }
+        }
+
+        public static void AddUserToFolder(string folderId, string userId)
+        {
+            if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(userId))
+                return;
+
+            using (var db = new FileSyncDbContext())
+            {
+                var folder = db.Folders.Find(folderId);
+                if (folder == null)
+                    return;
+
+                var user = db.Users.Find(userId);
+                if (user == null)
+                    return;
+
+                db.Entry(folder).Collection("AuthorizedUsers").Load();
+
+                folder.AuthorizedUsers.Add(user);
+                db.SaveChanges();
+            }
+        }
+
+        public static void RemoveGroupFromFolder(string folderId, string groupId)
+        {
+            if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(groupId))
+                return;
+
+            using (var db = new FileSyncDbContext())
+            {
+                var folder = db.Folders.Find(folderId);
+                if (folder == null)
+                    return;
+
+                var group = db.Groups.Find(groupId);
+                if (group == null)
+                    return;
+
+                db.Entry(folder).Collection("AuthorizedGroups").Load();
+
+                folder.AuthorizedGroups.Remove(group);
+                db.SaveChanges();
+            }
+        }
+
+        public static void AddGroupToFolder(string folderId, string groupId)
+        {
+            if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(groupId))
+                return;
+
+            using (var db = new FileSyncDbContext())
+            {
+                var folder = db.Folders.Find(folderId);
+                if (folder == null)
+                    return;
+
+                var group = db.Groups.Find(groupId);
+                if (group == null)
+                    return;
+
+                db.Entry(folder).Collection("AuthorizedGroups").Load();
+
+                folder.AuthorizedGroups.Add(group);
+                db.SaveChanges();
+            }
+        }
+
         public static Group GetGroup(string groupId)
         {
             using (var db = new FileSyncDbContext())
@@ -257,10 +344,28 @@ namespace FileSync.DAL
             }
         }
 
+        public static IEnumerable<Group> GetGroupsBySearch(GroupSearchParams searchParams)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var groups = (from g in db.Groups
+                              from u in db.Users.Where(u2 => g.Users.Any(u3 => u2.Id == u3.Id)).DefaultIfEmpty()
+                              where
+                              ((searchParams.UserName == null || searchParams.UserName == string.Empty) || (u != null && u.UserName.Contains(searchParams.UserName))) &&
+                              (g.DisplayName.Contains(searchParams.Name))
+                              group g by g into groupedGroups
+                              where (groupedGroups.Key.Users.Count() >= searchParams.MembersCount)
+                              select groupedGroups.Key
+                               ).ToList();
+                return groups;
+            }
+        }
+
         public static void AddGroup(Group group)
         {
             using (var db = new FileSyncDbContext())
             {
+                group.Id = Guid.NewGuid().ToString();
                 db.Groups.Add(group);
                 db.SaveChanges();
             }

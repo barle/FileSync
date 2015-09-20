@@ -1,0 +1,90 @@
+﻿@model FileSync.Models.Folder
+
+@{
+    ViewBag.PageIcon = "lock";
+    ViewBag.PageIconDescription = Model.Name;
+    ViewBag.Title = Model.Name;
+}
+
+<div style="display: flex; flex-flow: row wrap; justify-content: flex-start;padding-top: 30px;">
+    <div style="margin-right: 100px; margin-bottom: 100px; min-width: 450px;">
+        <h4>Authorized Groups:</h4>
+        <hr/>
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>
+                    Group Name
+                </th>
+                <th>
+                    Remove
+                </th>
+            </tr>
+
+            @foreach (var group in Model.AuthorizedGroups)
+            {
+                <tr>
+                    <td>
+                        <span class="glyphicon glyphicon-user fs-icon"></span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => group.DisplayName)
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("UnAuthorizeGroupFromFolder", "ManageFolders", new { folderId = Model.Id, groupId = group.Id }, FormMethod.Post))
+                {
+                        <button type="submit" class="glyphicon glyphicon-remove fs-no-decoration fs-icon-button"></button>
+                }
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <div style="position:relative; height: 45px; font-size:45px; line-height: 1;">
+            @Html.ActionLink(" ", "SearchGroupsToAuthorize", new { folderId = Model.Id },
+        new { @class = "glyphicon-plus fs-no-decoration fs-icon-button fs-fab", @style = "position: absolute; right: 0;" })
+        </div>
+
+    </div>
+
+    <div style="min-width: 450px; margin-bottom: 100px; ">
+        <h4>Authorized Users:</h4>
+        <hr />
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>
+                    User Name
+                </th>
+                <th>
+                    Remove
+                </th>
+            </tr>
+
+            @foreach (var user in Model.AuthorizedUsers)
+            {
+                <tr>
+                    <td>
+                        <span class="glyphicon glyphicon-user fs-icon"></span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.UserName)
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("UnAuthorizeUserFromFolder", "ManageFolders", new { folderId = Model.Id, userId = user.Id }, FormMethod.Post))
+                    {
+                    <button type="submit" class="glyphicon glyphicon-remove fs-no-decoration fs-icon-button"></button>
+                    }
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <div style="position:relative; height: 45px; font-size:45px; line-height: 1;">
+            @Html.ActionLink(" ", "SearchUsersToAuthorize", new { folderId = Model.Id },
+        new { @class = "glyphicon-plus fs-no-decoration fs-icon-button fs-fab", @style = "position: absolute; right: 0;" })
+        </div>
+
+    </div>
+
+</div>

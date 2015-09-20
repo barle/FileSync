@@ -38,7 +38,6 @@ namespace FileSync.Controllers
             return View(group);
         }
 
-        // GET: Groups/ManageGroupUsers
         public ActionResult ManageGroupUsers(string id)
         {
             if (id == null)
@@ -53,44 +52,36 @@ namespace FileSync.Controllers
             return View(group);
         }
 
-        public ActionResult GetUsersToAdd(string groupId, string searchGroup, string searchName, int numOfGroups = 0)
+        public ActionResult SearchUsersToAdd(string groupId, string userName, string groupName, int? groupsCount)
         {
             if (groupId == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
             Group group = FileSyncDal.GetGroup(groupId);
             if (group == null)
-            {
                 return HttpNotFound();
-            }
 
-            if (String.IsNullOrWhiteSpace(searchName))
-            {
-                searchName = "";
-            }
-            if (String.IsNullOrWhiteSpace(searchGroup))
-            {
-                searchGroup = "";
-            }
-
-            var users = FileSyncDal.GetUsersBySearch(searchGroup, searchName, numOfGroups);
+            var searchParams = new FileSync.Models.UserSearchParams(userName, groupName, groupsCount);
+            var users = FileSyncDal.GetUsersBySearch(searchParams);
             var model = new LinkUserViewModel()
             {
-                Action = "AddUserToGroup",
-                Controller = "ManageGroups",
-                Users = users.Where(u => !group.Users.Any(gu => gu.Id == u.Id)),
+                CallbackAction = "AddUserToGroup",
+                CallbackController = "ManageGroups",
+                Users = users.Where(u => !group.Users.Any(gu => gu.Id == u.Id)),// users that are not already in this group
                 ParentId = groupId
             };
-            return View("../LinkUsers/LinkUsersView", model);
+            ViewBag.PageIcon = "star";
+            ViewBag.PageIconDescription = "Add Users to Group";
+            ViewBag.Title = "Link Users";
+
+            return View("../Links/LinkUsersView", model);
         }
 
         [HttpPost]
         public ActionResult AddUserToGroup(string parentId, string userId)
         {
             FileSyncDal.AddUserToGroup(parentId, userId);
-            return GetUsersToAdd(parentId, "", "", 0);
+            return RedirectToAction("SearchUsersToAdd", new { groupId = parentId });
         }
 
         [HttpPost]
@@ -114,7 +105,7 @@ namespace FileSync.Controllers
         // POST: Groups/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,DisplayName")] Group group)
+        public ActionResult Create([Bind(Include = "DisplayName")] Group group)
         {
             if (ModelState.IsValid)
             {

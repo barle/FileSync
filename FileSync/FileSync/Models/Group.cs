@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
@@ -16,6 +17,7 @@ namespace FileSync.Models
             AllowedFiles = new List<File>();
         }
         public string Id { get; set; }
+        [DisplayName("Group Name")]
         public string DisplayName { get; set; }
         public ICollection<FileSyncUser> Users { get; set; }
         public ICollection<Group> SubGroups { get; set; }

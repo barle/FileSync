@@ -12,8 +12,8 @@ namespace FileSync.Models
             Users = new List<FileSyncUser>();
         }
         public IEnumerable<FileSyncUser> Users { get; set; }
-        public string Controller { get; set; }
-        public string Action { get; set; }
+        public string CallbackAction { get; set; }
+        public string CallbackController { get; set; }
         public string ParentId { get; set; }
     }
 }
