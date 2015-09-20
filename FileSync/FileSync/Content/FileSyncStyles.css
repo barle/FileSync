@@ -232,3 +232,16 @@ body{
         -moz-column-rule-color: lightblue; /* Firefox */
         column-rule-color: lightblue;
     }
+
+.fs-rotate{
+    animation: rotating 2s linear infinite;
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

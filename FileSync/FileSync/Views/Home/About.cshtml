@@ -1,4 +1,32 @@
-﻿<h2>About us</h2>
+﻿@{
+    ViewBag.Title = "About";
+    ViewBag.PageIcon = "info-sign";
+    ViewBag.PageIconDescription = "About Us";
+    ViewBag.ReturnUrl = "../Index";
+}
+
+<h2>About us</h2>
 <div class="newspaper">
-    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
+    FileSync website is designed to map and store your favorite folders and files on the web. 
+    This site was first built by Bar Levy and Itamar Karavani as a internet applications course project, 
+    and has become a huge success since then.
+    At first, the site used to get a path to a local folder in the customer PC and save a link to each of the files, folders and sub-folders.
+    Today, our site supports upload, download, hot backup and data distribution across 5 different places on earth.
+    Each file you upload to FileSync is treated with our best care and love. 
+    Each file gets 3 meals a day, free entrence to our hot springs and a free sandwich.
+    So! go and start using FileSync today! for your peace and for your beloved files.
+    the cake is a lie.
 </div>
+<hr />
+<aside>
+    <h4>Bar Levy & Itamar Karavani</h4>
+    <p>The Best developers ever :)</p>
+</aside>
+
+<div style="height: 200px; width:200px;" class="fs-rotate">
+    <canvas height="200" width="200" id="faceCanvas"></canvas>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/canvas/faceCanvas.js")
+}
