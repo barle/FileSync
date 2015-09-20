@@ -1,13 +1,13 @@
 ﻿
-<div class="container">
+<!--<div class="container">
 
-    <div class="jumbotron">
+    <div class="jumbotron">-->
         
-        <svg id="visualisation" width="1000" height="500"></svg>
+        <svg id="daysToFilesCount" width="450" height="250"></svg>
 
-    </div>
+<!--    </div>
 
-</div>
+</div>-->
 <style>
     .axis path {
         fill: none;
@@ -21,5 +21,8 @@
 
 </style>
 
-@Scripts.Render("http://d3js.org/d3.v3.min.js")
-@Scripts.Render("~/Scripts/Statistics/daysToFilesGraph.js")
+@section Scripts {
+    @Scripts.Render("http://d3js.org/d3.v3.min.js")
+    @Scripts.Render("~/Scripts/Statistics/daysToFilesGraph.js")
+    @Scripts.Render("~/bundles/jqueryval")
+}
