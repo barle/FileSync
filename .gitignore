@@ -1,1 +1,8 @@
 FileSync/FileSync.v12.suo
+FileSync/FileSync.v12.suo
+FileSync/FileSync/App_Data/FileSync_log.ldf
+*.dll
+*.pdb
+*.cache
+*.dll
+*.pdb

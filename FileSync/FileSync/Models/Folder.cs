@@ -22,6 +22,11 @@ namespace FileSync.Models
 
         [DisplayName("Parent Folder")]
         public string ParentFolderId { get; set; }
+
+        public DateTime InsertionDate { get; set; }
+
+        public long Size { get; set; }
+
         public ICollection<Folder> SubFolders { get; set; }
         public ICollection<File> Files { get; set; }
         public ICollection<FileSyncUser> AuthorizedUsers { get; set; }

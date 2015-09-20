@@ -13,7 +13,7 @@ using FileSync.Mapper;
 
 namespace FileSync.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ManageFoldersController : Controller
     {
         // GET: Folders

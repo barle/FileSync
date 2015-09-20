@@ -417,6 +417,17 @@ namespace FileSync.DAL
             }
         }
 
+        public static IEnumerable<object> GetFoldersSizes()
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var foldersSizes = (from folder in db.Folders
+                                    where folder.ParentFolderId == null
+                                    select new { folderName = folder.Name, size = folder.Size }).ToList();
+                return foldersSizes;
+            }
+        }
+
         private static IEnumerable<T> GetAuthorized<T>(IIdentity identity, IEnumerable<T> itemsToAuthorize) where T : IAuthorizableItem
         {
             if (identity == null) return Enumerable.Empty<T>();
