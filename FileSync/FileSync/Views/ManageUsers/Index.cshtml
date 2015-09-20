@@ -1,0 +1,36 @@
+﻿@model IEnumerable<FileSync.Models.FileSyncUser>
+
+@{
+    ViewBag.PageIcon = "user";
+    ViewBag.PageIconDescription = "Users";
+    ViewBag.Title = "Users";
+    ViewBag.ReturnUrl = "Manage";
+}
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+
+@foreach (var user in Model) {
+    <tr>
+        <td>
+            <span class="glyphicon glyphicon-star fs-icon"></span>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => user.UserName)
+        </td>
+        <td>
+            @Html.ActionLink(" ", "Edit", new { id = user.Id }, new { @class = "glyphicon glyphicon-pencil fs-no-decoration fs-icon-button" }) |
+            @Html.ActionLink(" ", "Details", new { id = user.Id }, new { @class = "glyphicon glyphicon-info-sign fs-no-decoration fs-icon-button" }) |
+            @Html.ActionLink(" ", "Delete", new { id = user.Id }, new { @class = "glyphicon glyphicon-remove fs-no-decoration fs-icon-button" })
+        </td>
+    </tr>
+}
+
+</table>

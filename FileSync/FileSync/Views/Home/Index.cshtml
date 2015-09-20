@@ -11,6 +11,11 @@
 
 <div class="container">
     <div class="fs-folder-content">
+        @if (!Model.Folders.Any() && !Model.Files.Any() && Model.ParentFolder == null)
+        {
+            <h2>Sorry, you have no files or folders that you are authorized to view :(</h2>
+        }
+        
         @if (Model.ParentFolder != null)
         {
             @Html.Partial("_FolderTemplate", 

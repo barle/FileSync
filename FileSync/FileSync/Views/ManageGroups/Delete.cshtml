@@ -2,7 +2,9 @@
 
 @{
     ViewBag.Title = "Delete";
-    ViewBag.ReturnValue = "ManageGroups";
+    ViewBag.ReturnUrl = "ManageGroups";
+    ViewBag.PageIcon = "star";
+    ViewBag.PageIconDescription = Model.DisplayName;
 }
 
 <h2>Delete</h2>
@@ -26,7 +28,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Delete" class="btn btn-default" />
         </div>
     }
 </div>

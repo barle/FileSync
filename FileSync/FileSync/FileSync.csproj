@@ -175,6 +175,7 @@
     <Compile Include="Authorization\ItemAuthorizer.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ManageFoldersController.cs" />
+    <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageGroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageAccountController.cs" />
@@ -301,6 +302,10 @@
     <Content Include="Views\Links\LinkUsersView.cshtml" />
     <Content Include="Views\ManageFolders\ManageAuthorizations.cshtml" />
     <Content Include="Views\Links\LinkGroupsView.cshtml" />
+    <Content Include="Views\ManageUsers\Delete.cshtml" />
+    <Content Include="Views\ManageUsers\Details.cshtml" />
+    <Content Include="Views\ManageUsers\Edit.cshtml" />
+    <Content Include="Views\ManageUsers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
