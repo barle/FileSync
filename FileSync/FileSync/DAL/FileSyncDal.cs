@@ -16,6 +16,34 @@ namespace FileSync.DAL
         const string FILE_INCLUDES = "AuthorizedUsers,AuthorizedGroups,ParentFolder";
         const string GROUP_INCLUDES = "Users,SubGroups,ParentGroups,AllowedFolders,AllowedFiles";
 
+        public static IEnumerable<FileSyncUser> GetAllUsers()
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var users = (from u in db.Users
+                             select u).ToList();
+                return users;
+            }
+        }
+
+        public static IEnumerable<FileSyncUser> GetUsersBySearch(string groupName, string userName, int numOfGroups)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var users = (from u in db.Users
+                             from g in db.Groups
+                             where
+                             (((groupName == null || groupName == string.Empty) && u.UserGroups.Count == 0) || u.UserGroups.Any(g1 => g1.Id == g.Id))
+                             && (groupName == null || groupName == string.Empty || g.DisplayName.Contains(groupName))
+                             && u.UserName.Contains(userName)
+                             group u by u into groupedUsers
+                             where (groupedUsers.Key.UserGroups.Count() >= numOfGroups)
+                             select groupedUsers.Key
+                             ).ToList();
+                return users;
+            }
+        }
+
         public static File GetFile(IIdentity identity, string fileId)
         {
             using(var db = new FileSyncDbContext())
@@ -186,17 +214,26 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddUserToGroup(string groupId, FileSyncUser user)
+        public static void AddUserToGroup(string groupId, string userId)
         {
-            if (user == null)
+            if (string.IsNullOrEmpty(groupId) || string.IsNullOrEmpty(userId))
                 return;
 
-            var group = GetGroup(groupId);
-            if (group == null)
-                return;
+            using (var db = new FileSyncDbContext())
+            {
+                var group = db.Groups.Find(groupId);
+                if (group == null)
+                    return;
 
-            group.Users.Add(user);
-            SaveEditGroup(group);
+                var user = db.Users.Find(userId);
+                if (user == null)
+                    return;
+
+                db.Entry(group).Collection("Users").Load();
+
+                group.Users.Add(user);
+                db.SaveChanges();
+            }
         }
 
         public static Group GetGroup(string groupId)

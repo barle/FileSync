@@ -1,7 +1,7 @@
 ﻿@model FileSync.Models.File
 
 <div class="fs-file" title="@Model.Name">
-    <a href="/Home/DownloadFile?id=@Model.Id">
+    <a href="/Home/DownloadFile/@Model.Id">
         <span class="fs-file-icon glyphicon glyphicon-file"></span>
         <span class="fs-file-description">@Model.Name</span>
     </a>

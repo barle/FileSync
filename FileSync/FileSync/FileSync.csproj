@@ -194,6 +194,7 @@
     <Compile Include="Models\FileSyncUser.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\IAuthorizableItem.cs" />
+    <Compile Include="Models\LinkUserViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -294,6 +295,7 @@
     <Content Include="Views\ManageGroups\ManageGroupUsers.cshtml" />
     <Content Include="Views\Home\_FileTemplate.cshtml" />
     <Content Include="Views\Home\_FolderTemplate.cshtml" />
+    <Content Include="Views\LinkUsers\LinkUsersView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

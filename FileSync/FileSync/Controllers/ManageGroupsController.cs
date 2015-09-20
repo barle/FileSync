@@ -53,6 +53,46 @@ namespace FileSync.Controllers
             return View(group);
         }
 
+        public ActionResult GetUsersToAdd(string groupId, string searchGroup, string searchName, int numOfGroups = 0)
+        {
+            if (groupId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Group group = FileSyncDal.GetGroup(groupId);
+            if (group == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (String.IsNullOrWhiteSpace(searchName))
+            {
+                searchName = "";
+            }
+            if (String.IsNullOrWhiteSpace(searchGroup))
+            {
+                searchGroup = "";
+            }
+
+            var users = FileSyncDal.GetUsersBySearch(searchGroup, searchName, numOfGroups);
+            var model = new LinkUserViewModel()
+            {
+                Action = "AddUserToGroup",
+                Controller = "ManageGroups",
+                Users = users.Where(u => !group.Users.Any(gu => gu.Id == u.Id)),
+                ParentId = groupId
+            };
+            return View("../LinkUsers/LinkUsersView", model);
+        }
+
+        [HttpPost]
+        public ActionResult AddUserToGroup(string parentId, string userId)
+        {
+            FileSyncDal.AddUserToGroup(parentId, userId);
+            return GetUsersToAdd(parentId, "", "", 0);
+        }
+
         [HttpPost]
         public ActionResult RemoveUserFromGroup(string groupId, string userId)
         {
@@ -72,8 +112,6 @@ namespace FileSync.Controllers
         }
 
         // POST: Groups/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,DisplayName")] Group group)
@@ -103,8 +141,6 @@ namespace FileSync.Controllers
         }
 
         // POST: Groups/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,DisplayName")] Group group)

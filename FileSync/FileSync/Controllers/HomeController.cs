@@ -1,4 +1,5 @@
-﻿using FileSync.DAL;
+﻿using FileSync.Authorization;
+using FileSync.DAL;
 using FileSync.Models;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace FileSync.Controllers
             return View(homeViewModel);
         }
 
+        [ItemAuthorize("file")]
         public ActionResult DownloadFile(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
