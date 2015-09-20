@@ -156,6 +156,7 @@ namespace FileSync.Controllers
             ViewBag.PageIcon = "lock";
             ViewBag.PageIconDescription = "Authorize Users to Folder";
             ViewBag.Title = "Link Users";
+            ViewBag.ReturnUrl = "ManageFolders/ManageAuthorizations/" + folderId;
 
             return View("../Links/LinkUsersView", model);
         }
@@ -205,6 +206,7 @@ namespace FileSync.Controllers
             ViewBag.PageIcon = "lock";
             ViewBag.PageIconDescription = "Authorize Groups to Folder";
             ViewBag.Title = "Link Groups";
+            ViewBag.ReturnUrl = "ManageFolders/ManageAuthorizations/" + folderId;
 
             return View("../Links/LinkGroupsView", model);
         }

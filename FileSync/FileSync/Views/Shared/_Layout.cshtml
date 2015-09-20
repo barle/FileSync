@@ -12,6 +12,7 @@
     <div class="navbar navbar-fixed-top fs-navbar">
         <div class="container">
             @Html.ActionLink("File Sync", "Index", "Home", new { area = "" }, new { @class = "navbar-brand fs-nav-item fs-no-decoration" })
+
             @if (!string.IsNullOrEmpty(ViewBag.PageIcon))
             {
                 <div class="fs-navbar-icon-container fs-nav-item">
@@ -19,6 +20,8 @@
                     <span class="fs-icon-description" style="font-size:12px;">@ViewBag.PageIconDescription</span>
                 </div>
             }
+           
+            
             @if (User.IsInRole("Admin"))
             {
                 <div class="fs-nav-item" style="float:left;">
@@ -29,6 +32,7 @@
                     </ul>
                 </div>
             }
+            
             <div class="fs-nav-item" style="float: right; margin-right: 30px;">
                 @Html.Partial("_LoginPartial")
             </div>
@@ -38,7 +42,13 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - File Sync</p>
+            @if (!string.IsNullOrEmpty(ViewBag.ReturnUrl))
+            {
+                <a class="fs-navbar-icon-container fs-nav-item fs-icon-button" style="position: absolute;" href="/@ViewBag.ReturnUrl">
+                    <span class="fs-navbar-icon glyphicon glyphicon-arrow-left"></span>
+                    <span class="fs-icon-description" style="font-size:12px;">Back</span>
+                </a>
+            }
         </footer>
     </div>
 

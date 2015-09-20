@@ -73,6 +73,7 @@ namespace FileSync.Controllers
             ViewBag.PageIcon = "star";
             ViewBag.PageIconDescription = "Add Users to Group";
             ViewBag.Title = "Link Users";
+            ViewBag.ReturnUrl = "ManageGroups/ManageGroupUsers/" + groupId;
 
             return View("../Links/LinkUsersView", model);
         }
