@@ -40,6 +40,9 @@ namespace FileSync.DAL
 
         }
 
+
+        #region Users
+
         public IEnumerable<FileSyncUser> GetAllUsers()
         {
             using (var db = new FileSyncDbContext())
@@ -55,39 +58,31 @@ namespace FileSync.DAL
             using (var db = new FileSyncDbContext())
             {
                 var users = (from u in db.Users
-                              from g in db.Groups.Where(g2 => u.UserGroups.Any(g3 => g2.Id == g3.Id)).DefaultIfEmpty()
-                              where
-                              ((searchParams.GroupName == null || searchParams.GroupName == string.Empty) || (g != null && g.DisplayName.Contains(searchParams.GroupName))) &&
-                              (u.UserName.Contains(searchParams.Name))
-                              group u by u into groupedUsers
-                              where (groupedUsers.Key.UserGroups.Count() >= searchParams.GroupsCount)
-                              select groupedUsers.Key
+                             from g in db.Groups.Where(g2 => u.UserGroups.Any(g3 => g2.Id == g3.Id)).DefaultIfEmpty()
+                             where
+                             ((searchParams.GroupName == null || searchParams.GroupName == string.Empty) || (g != null && g.DisplayName.Contains(searchParams.GroupName))) &&
+                             (u.UserName.Contains(searchParams.Name))
+                             group u by u into groupedUsers
+                             where (groupedUsers.Key.UserGroups.Count() >= searchParams.GroupsCount)
+                             select groupedUsers.Key
                                   ).ToList();
                 return users;
             }
         }
 
-        public File GetFile(IIdentity identity, string fileId)
-        {
-            using(var db = new FileSyncDbContext())
-            {
-                var files = (from f in db.Files.Includes(FILE_INCLUDES)
-                            where f.Id == fileId
-                            select f).ToList();
-                var authorizedFiles = GetAuthorized<File>(identity, files);
-                return authorizedFiles.FirstOrDefault();
-            }
-        }
+        #endregion
 
-        public Folder GetFolder(IIdentity identity, string folderId)
+        #region Files
+
+        public File GetFile(IIdentity identity, string fileId)
         {
             using (var db = new FileSyncDbContext())
             {
-                var folders = (from f in db.Folders.Includes(FOLDER_INCLUDES)
-                              where f.Id == folderId
-                              select f).ToList();
-                var authorizedFolders = GetAuthorized<Folder>(identity, folders);
-                return authorizedFolders.FirstOrDefault();
+                var files = (from f in db.Files.Includes(FILE_INCLUDES)
+                             where f.Id == fileId
+                             select f).ToList();
+                var authorizedFiles = GetAuthorized<File>(identity, files);
+                return authorizedFiles.FirstOrDefault();
             }
         }
 
@@ -98,28 +93,6 @@ namespace FileSync.DAL
                 var files = from file in db.Files.Includes(FILE_INCLUDES)
                             select file;
                 return GetAuthorized<File>(identity, files.ToList());
-            }
-        }
-
-        public IEnumerable<Folder> GetAllFolders(IIdentity identity)
-        {
-            using (var db = new FileSyncDbContext())
-            {
-                var folders = from folder in db.Folders.Includes(FOLDER_INCLUDES)
-                            select folder;
-                return GetAuthorized<Folder>(identity, folders.ToList());
-            }
-        }
-
-        public IEnumerable<Folder> GetRootFolders(IIdentity identity)
-        {
-            using (var db = new FileSyncDbContext())
-            {
-                var rootFolders = (from f in db.Folders
-                                   where f.ParentFolderId == null
-                                   select f).ToList();
-                var authorizedFolders = GetAuthorized<Folder>(identity, rootFolders);
-                return authorizedFolders;
             }
         }
 
@@ -159,6 +132,44 @@ namespace FileSync.DAL
             }
         }
 
+        #endregion
+
+        #region Folders
+
+        public Folder GetFolder(IIdentity identity, string folderId)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var folders = (from f in db.Folders.Includes(FOLDER_INCLUDES)
+                               where f.Id == folderId
+                               select f).ToList();
+                var authorizedFolders = GetAuthorized<Folder>(identity, folders);
+                return authorizedFolders.FirstOrDefault();
+            }
+        }
+
+        public IEnumerable<Folder> GetAllFolders(IIdentity identity)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var folders = from folder in db.Folders.Includes(FOLDER_INCLUDES)
+                              select folder;
+                return GetAuthorized<Folder>(identity, folders.ToList());
+            }
+        }
+
+        public IEnumerable<Folder> GetRootFolders(IIdentity identity)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var rootFolders = (from f in db.Folders
+                                   where f.ParentFolderId == null
+                                   select f).ToList();
+                var authorizedFolders = GetAuthorized<Folder>(identity, rootFolders);
+                return authorizedFolders;
+            }
+        }
+
         public void AddFolder(Folder folder)
         {
             using (var db = new FileSyncDbContext())
@@ -195,7 +206,7 @@ namespace FileSync.DAL
                     return;
 
                 var allFolders = (from f in db.Folders select f).ToList();
-                var foldersToRemove = new List<Folder>(){folder};
+                var foldersToRemove = new List<Folder>() { folder };
                 GetAllFoldersInHirarchy(folder, allFolders, foldersToRemove);
                 db.Folders.RemoveRange(foldersToRemove);
                 db.SaveChanges();
@@ -213,50 +224,6 @@ namespace FileSync.DAL
                     foldersToRemove.Add(f);
                     GetAllFoldersInHirarchy(f, allFolders, foldersToRemove);
                 }
-            }
-        }
-
-        public void RemoveUserFromGroup(string groupId, string userId)
-        {
-            if (string.IsNullOrEmpty(groupId) || string.IsNullOrEmpty(userId))
-                return;
-
-            using (var db = new FileSyncDbContext())
-            {
-                var group = db.Groups.Find(groupId);
-                if (group == null)
-                    return;
-
-                var user = db.Users.Find(userId);
-                if (user == null)
-                    return;
-
-                db.Entry(group).Collection("Users").Load();
-
-                group.Users.Remove(user);
-                db.SaveChanges();
-            }
-        }
-
-        public void AddUserToGroup(string groupId, string userId)
-        {
-            if (string.IsNullOrEmpty(groupId) || string.IsNullOrEmpty(userId))
-                return;
-
-            using (var db = new FileSyncDbContext())
-            {
-                var group = db.Groups.Find(groupId);
-                if (group == null)
-                    return;
-
-                var user = db.Users.Find(userId);
-                if (user == null)
-                    return;
-
-                db.Entry(group).Collection("Users").Load();
-
-                group.Users.Add(user);
-                db.SaveChanges();
             }
         }
 
@@ -348,6 +315,54 @@ namespace FileSync.DAL
             }
         }
 
+        #endregion
+
+        #region Groups
+
+        public void RemoveUserFromGroup(string groupId, string userId)
+        {
+            if (string.IsNullOrEmpty(groupId) || string.IsNullOrEmpty(userId))
+                return;
+
+            using (var db = new FileSyncDbContext())
+            {
+                var group = db.Groups.Find(groupId);
+                if (group == null)
+                    return;
+
+                var user = db.Users.Find(userId);
+                if (user == null)
+                    return;
+
+                db.Entry(group).Collection("Users").Load();
+
+                group.Users.Remove(user);
+                db.SaveChanges();
+            }
+        }
+
+        public void AddUserToGroup(string groupId, string userId)
+        {
+            if (string.IsNullOrEmpty(groupId) || string.IsNullOrEmpty(userId))
+                return;
+
+            using (var db = new FileSyncDbContext())
+            {
+                var group = db.Groups.Find(groupId);
+                if (group == null)
+                    return;
+
+                var user = db.Users.Find(userId);
+                if (user == null)
+                    return;
+
+                db.Entry(group).Collection("Users").Load();
+
+                group.Users.Add(user);
+                db.SaveChanges();
+            }
+        }
+
         public Group GetGroup(string groupId)
         {
             using (var db = new FileSyncDbContext())
@@ -410,8 +425,8 @@ namespace FileSync.DAL
             using (var db = new FileSyncDbContext())
             {
                 var group = (from g in db.Groups
-                            where g.Id == groupId
-                            select g).FirstOrDefault();
+                             where g.Id == groupId
+                             select g).FirstOrDefault();
                 if (group == null)
                     return;
 
@@ -419,6 +434,10 @@ namespace FileSync.DAL
                 db.SaveChanges();
             }
         }
+
+        #endregion
+
+        #region Statistics
 
         public IEnumerable<object> GetFilesPerDays(int daysBack)
         {
@@ -438,7 +457,7 @@ namespace FileSync.DAL
                         dayToFilesCount.Add(new { date = date, count = 0 });
                     }
                 }
-                return dayToFilesCount.OrderBy(d => d.date).Select(d=> new {date = d.date.ToString("dd/MM"), count = d.count}).ToList();
+                return dayToFilesCount.OrderBy(d => d.date).Select(d => new { date = d.date.ToString("dd/MM"), count = d.count }).ToList();
             }
         }
 
@@ -452,6 +471,8 @@ namespace FileSync.DAL
                 return foldersSizes;
             }
         }
+
+        #endregion
 
         private IEnumerable<T> GetAuthorized<T>(IIdentity identity, IEnumerable<T> itemsToAuthorize) where T : IAuthorizableItem
         {

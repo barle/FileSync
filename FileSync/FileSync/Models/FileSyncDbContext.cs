@@ -27,27 +27,16 @@ namespace FileSync.Models
         {
             base.OnModelCreating(modelBuilder);
             SetTablesNames(modelBuilder);
-            //SetTablesKeys(modelBuilder);
             SetRelations(modelBuilder);
         }
 
         private void SetTablesNames(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<IdentityUser>().ToTable("User").Property(u => u.Id).HasColumnName("UserId");
             modelBuilder.Entity<FileSyncUser>().ToTable("User").Property(u=>u.Id).HasColumnName("UserId");
             modelBuilder.Entity<IdentityUserRole>().ToTable("UserRole");
-            //modelBuilder.Entity<IdentityUserRole>().ToTable("UserRole").Property(u=>u.RoleId).HasColumnName("RoleId");
-            //modelBuilder.Entity<IdentityUserRole>().Property(u => u.UserId).HasColumnName("UserId");
             modelBuilder.Entity<IdentityUserLogin>().ToTable("UserLogin");
             modelBuilder.Entity<IdentityUserClaim>().ToTable("UserClaim");
             modelBuilder.Entity<IdentityRole>().ToTable("Role");
-        }
-
-        private void SetTablesKeys(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
-            modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
-            modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
         }
 
         private void SetRelations(DbModelBuilder modelBuilder)
