@@ -20,7 +20,7 @@ namespace FileSync.Controllers
         // GET: Groups
         public ActionResult Index()
         {
-            return View(FileSyncDal.GetAllGroups());
+            return View(FileSyncDal.Instance.GetAllGroups());
         }
 
         // GET: Groups/Details/5
@@ -30,7 +30,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Group group = FileSyncDal.GetGroup(id);
+            Group group = FileSyncDal.Instance.GetGroup(id);
             if (group == null)
             {
                 return HttpNotFound();
@@ -44,7 +44,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Group group = FileSyncDal.GetGroup(id);
+            Group group = FileSyncDal.Instance.GetGroup(id);
             if (group == null)
             {
                 return HttpNotFound();
@@ -57,12 +57,12 @@ namespace FileSync.Controllers
             if (groupId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Group group = FileSyncDal.GetGroup(groupId);
+            Group group = FileSyncDal.Instance.GetGroup(groupId);
             if (group == null)
                 return HttpNotFound();
 
             var searchParams = new FileSync.Models.UserSearchParams(userName, groupName, groupsCount);
-            var users = FileSyncDal.GetUsersBySearch(searchParams);
+            var users = FileSyncDal.Instance.GetUsersBySearch(searchParams);
             var model = new LinkUserViewModel()
             {
                 CallbackAction = "AddUserToGroup",
@@ -81,7 +81,7 @@ namespace FileSync.Controllers
         [HttpPost]
         public ActionResult AddUserToGroup(string parentId, string userId)
         {
-            FileSyncDal.AddUserToGroup(parentId, userId);
+            FileSyncDal.Instance.AddUserToGroup(parentId, userId);
             return RedirectToAction("SearchUsersToAdd", new { groupId = parentId });
         }
 
@@ -93,7 +93,7 @@ namespace FileSync.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            FileSyncDal.RemoveUserFromGroup(groupId, userId);
+            FileSyncDal.Instance.RemoveUserFromGroup(groupId, userId);
             return RedirectToAction("ManageGroupUsers", new { id = groupId });
         }
 
@@ -110,7 +110,7 @@ namespace FileSync.Controllers
         {
             if (ModelState.IsValid)
             {
-                FileSyncDal.AddGroup(group);
+                FileSyncDal.Instance.AddGroup(group);
                 return RedirectToAction("Index");
             }
 
@@ -124,7 +124,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Group group = FileSyncDal.GetGroup(id);
+            Group group = FileSyncDal.Instance.GetGroup(id);
             if (group == null)
             {
                 return HttpNotFound();
@@ -139,7 +139,7 @@ namespace FileSync.Controllers
         {
             if (ModelState.IsValid)
             {
-                FileSyncDal.SaveEditGroup(group);
+                FileSyncDal.Instance.SaveEditGroup(group);
                 return RedirectToAction("Index");
             }
             return View(group);
@@ -152,7 +152,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Group group = FileSyncDal.GetGroup(id);
+            Group group = FileSyncDal.Instance.GetGroup(id);
             if (group == null)
             {
                 return HttpNotFound();
@@ -165,7 +165,7 @@ namespace FileSync.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            FileSyncDal.RemoveGroup(id);
+            FileSyncDal.Instance.RemoveGroup(id);
             return RedirectToAction("Index");
         }
 

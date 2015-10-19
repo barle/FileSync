@@ -67,7 +67,7 @@ function _onload() {
     ctx.fillStyle = "rgba(255,255,255,1)";
     ctx.fill();
 
-    //Shape3;
+    //Nose
     ctx.shadowColor ="rgba(0,0,0,0)";
     ctx.strokeStyle ="rgba(0,0,0,1)";
     ctx.lineWidth = 1;
@@ -78,7 +78,6 @@ function _onload() {
     ctx.lineTo(86,103);
     ctx.stroke();
 
-    //Shape4;
     ctx.shadowColor ="rgba(0,0,0,0)";
     ctx.strokeStyle ="rgba(0,0,0,1)";
     ctx.lineWidth = 1;
@@ -89,7 +88,7 @@ function _onload() {
     ctx.lineTo(97,104);
     ctx.stroke();
 
-    //Shape5;
+    //Mouth;
     ctx.shadowColor ="rgba(0,0,0,0)";
     ctx.strokeStyle ="rgba(0,0,0,1)";
     ctx.lineWidth = 1;

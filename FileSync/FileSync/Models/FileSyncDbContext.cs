@@ -25,15 +25,19 @@ namespace FileSync.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             SetTablesNames(modelBuilder);
-            SetTablesKeys(modelBuilder);
+            //SetTablesKeys(modelBuilder);
             SetRelations(modelBuilder);
         }
 
         private void SetTablesNames(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<FileSyncUser>().ToTable("User");
+            //modelBuilder.Entity<IdentityUser>().ToTable("User").Property(u => u.Id).HasColumnName("UserId");
+            modelBuilder.Entity<FileSyncUser>().ToTable("User").Property(u=>u.Id).HasColumnName("UserId");
             modelBuilder.Entity<IdentityUserRole>().ToTable("UserRole");
+            //modelBuilder.Entity<IdentityUserRole>().ToTable("UserRole").Property(u=>u.RoleId).HasColumnName("RoleId");
+            //modelBuilder.Entity<IdentityUserRole>().Property(u => u.UserId).HasColumnName("UserId");
             modelBuilder.Entity<IdentityUserLogin>().ToTable("UserLogin");
             modelBuilder.Entity<IdentityUserClaim>().ToTable("UserClaim");
             modelBuilder.Entity<IdentityRole>().ToTable("Role");

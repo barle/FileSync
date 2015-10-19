@@ -32,8 +32,8 @@ namespace FileSync.Mapper
             foldersToAdd.Add(_folder);
             var folderSize = MapFolder(directoryInfo, _folder, foldersToAdd, filesToAdd);
             _folder.Size = folderSize;
-            FileSyncDal.AddFolders(foldersToAdd);
-            FileSyncDal.AddFiles(filesToAdd);
+            FileSyncDal.Instance.AddFolders(foldersToAdd);
+            FileSyncDal.Instance.AddFiles(filesToAdd);
         }
 
         // returns the folder size and add to the foldersToAdd list all the inside folders and same for the files to the filesToAdd list

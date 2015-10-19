@@ -21,20 +21,19 @@
                 </div>
             }
            
-            
-            @if (User.IsInRole("Admin"))
-            {
                 <div class="fs-nav-item" style="float:left;">
                     <ul class="nav navbar-nav navbar-left">
+                        @if (User.IsInRole("Admin"))
+                        {
                         <li>
                             @Html.ActionLink("Manage", "Index", "Manage")
                         </li>
+                        }
                         <li>
                             @Html.ActionLink("About", "About", "Home")
                         </li>
                     </ul>
                 </div>
-            }
             
             <div class="fs-nav-item" style="float: right; margin-right: 30px;">
                 @Html.Partial("_LoginPartial")

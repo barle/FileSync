@@ -19,13 +19,13 @@ namespace FileSync.Controllers
 
         public ActionResult GetFilesPerDays(int days)
         {
-            var daysToFilesCount = FileSyncDal.GetFilesPerDays(days);
+            var daysToFilesCount = FileSyncDal.Instance.GetFilesPerDays(days);
             return Json(daysToFilesCount, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetFoldersSizes()
         {
-            var foldersSizes = FileSyncDal.GetFoldersSizes();
+            var foldersSizes = FileSyncDal.Instance.GetFoldersSizes();
             return Json(foldersSizes, JsonRequestBehavior.AllowGet);
         }
     }

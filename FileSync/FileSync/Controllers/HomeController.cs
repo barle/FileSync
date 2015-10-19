@@ -18,12 +18,12 @@ namespace FileSync.Controllers
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                var rootFolders = FileSyncDal.GetRootFolders(User.Identity);
+                var rootFolders = FileSyncDal.Instance.GetRootFolders(User.Identity);
                 var viewModel = new HomeViewModel(){Folders = rootFolders};
                 return View(viewModel);
             }
 
-            var parentFolder = FileSyncDal.GetFolder(User.Identity, id);
+            var parentFolder = FileSyncDal.Instance.GetFolder(User.Identity, id);
             if (parentFolder == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var homeViewModel = new HomeViewModel()
@@ -42,7 +42,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var file = FileSyncDal.GetFile(User.Identity, id);
+            var file = FileSyncDal.Instance.GetFile(User.Identity, id);
             if(file == null)
             {
                 return HttpNotFound();
@@ -61,7 +61,7 @@ namespace FileSync.Controllers
             if(id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var videoFile = FileSyncDal.GetFile(User.Identity, id);
+            var videoFile = FileSyncDal.Instance.GetFile(User.Identity, id);
             if(videoFile == null)
                 return HttpNotFound();
 

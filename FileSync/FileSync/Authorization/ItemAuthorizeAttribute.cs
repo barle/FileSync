@@ -34,17 +34,16 @@ namespace FileSync.Authorization
             IAuthorizableItem item = null;
             if(_itemType == "file")
             {
-                item = FileSyncDal.GetFile(identity, itemId);
+                item = FileSyncDal.Instance.GetFile(identity, itemId);
             }
             else if(_itemType == "folder")
             {
-                item = FileSyncDal.GetFolder(identity, itemId);
+                item = FileSyncDal.Instance.GetFolder(identity, itemId);
             }
             
             if(item == null) 
                 return false;
-
-            return ItemAuthorizer.IsAuthorized(identity, item);
+            return ItemAuthorizer.Instance.IsAuthorized(identity, item);
         }
     }
 }

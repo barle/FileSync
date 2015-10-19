@@ -16,6 +16,7 @@ namespace FileSync.Models
             AllowedFiles = new List<File>();
             AllowedFolders = new List<Folder>();
         }
+
         public ICollection<Group> UserGroups { get; set; }
 
         public ICollection<File> AllowedFiles { get; set; }

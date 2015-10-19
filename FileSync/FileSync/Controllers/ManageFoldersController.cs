@@ -19,7 +19,7 @@ namespace FileSync.Controllers
         // GET: Folders
         public ActionResult Index()
         {
-            var folders = FileSyncDal.GetRootFolders(User.Identity);
+            var folders = FileSyncDal.Instance.GetRootFolders(User.Identity);
             return View(folders.ToList());
         }
 
@@ -31,7 +31,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Folder folder = FileSyncDal.GetFolder(User.Identity, id);
+            Folder folder = FileSyncDal.Instance.GetFolder(User.Identity, id);
             if (folder == null)
             {
                 return HttpNotFound();
@@ -67,7 +67,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Folder folder = FileSyncDal.GetFolder(User.Identity, id);
+            Folder folder = FileSyncDal.Instance.GetFolder(User.Identity, id);
             if (folder == null)
             {
                 return HttpNotFound();
@@ -85,11 +85,11 @@ namespace FileSync.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existFolder = FileSyncDal.GetFolder(User.Identity, folder.Id);
+                var existFolder = FileSyncDal.Instance.GetFolder(User.Identity, folder.Id);
                 if (existFolder == null)
                     return HttpNotFound();
                 existFolder.Name = folder.Name;
-                FileSyncDal.SaveEditFolder(existFolder);
+                FileSyncDal.Instance.SaveEditFolder(existFolder);
                 return RedirectToAction("Index");
             }
             return View(folder);
@@ -103,7 +103,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Folder folder = FileSyncDal.GetFolder(User.Identity, id);
+            Folder folder = FileSyncDal.Instance.GetFolder(User.Identity, id);
             if (folder == null)
             {
                 return HttpNotFound();
@@ -117,7 +117,7 @@ namespace FileSync.Controllers
         [ItemAuthorize("folder")]
         public ActionResult DeleteConfirmed(string id)
         {
-            FileSyncDal.RemoveFolder(id);
+            FileSyncDal.Instance.RemoveFolder(id);
             return RedirectToAction("Index");
         }
 
@@ -127,7 +127,7 @@ namespace FileSync.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Folder folder = FileSyncDal.GetFolder(User.Identity, id);
+            Folder folder = FileSyncDal.Instance.GetFolder(User.Identity, id);
             if (folder == null)
             {
                 return HttpNotFound();
@@ -140,12 +140,12 @@ namespace FileSync.Controllers
             if (folderId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Folder folder = FileSyncDal.GetFolder(User.Identity, folderId);
+            Folder folder = FileSyncDal.Instance.GetFolder(User.Identity, folderId);
             if (folder == null)
                 return HttpNotFound();
 
             var searchParams = new FileSync.Models.UserSearchParams(userName, groupName, groupsCount);
-            var users = FileSyncDal.GetUsersBySearch(searchParams);
+            var users = FileSyncDal.Instance.GetUsersBySearch(searchParams);
             var model = new LinkUserViewModel()
             {
                 CallbackAction = "AuthorizeUserToFolder",
@@ -169,7 +169,7 @@ namespace FileSync.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            FileSyncDal.AddUserToFolder(parentId, userId);
+            FileSyncDal.Instance.AddUserToFolder(parentId, userId);
             return RedirectToAction("SearchUsersToAuthorize", new { folderId = parentId });
         }
 
@@ -181,7 +181,7 @@ namespace FileSync.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            FileSyncDal.RemoveUserFromFolder(folderId, userId);
+            FileSyncDal.Instance.RemoveUserFromFolder(folderId, userId);
             return RedirectToAction("ManageAuthorizations", new { id = folderId });
         }
 
@@ -190,12 +190,12 @@ namespace FileSync.Controllers
             if (folderId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Folder folder = FileSyncDal.GetFolder(User.Identity, folderId);
+            Folder folder = FileSyncDal.Instance.GetFolder(User.Identity, folderId);
             if (folder == null)
                 return HttpNotFound();
 
             var searchParams = new FileSync.Models.GroupSearchParams(groupName, userName, membersCount);
-            var groups = FileSyncDal.GetGroupsBySearch(searchParams);
+            var groups = FileSyncDal.Instance.GetGroupsBySearch(searchParams);
             var model = new LinkGroupViewModel()
             {
                 CallbackAction = "AuthorizeGroupToFolder",
@@ -219,7 +219,7 @@ namespace FileSync.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            FileSyncDal.AddGroupToFolder(parentId, groupId);
+            FileSyncDal.Instance.AddGroupToFolder(parentId, groupId);
             return RedirectToAction("SearchGroupsToAuthorize", new { folderId = parentId });
         }
 
@@ -231,7 +231,7 @@ namespace FileSync.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            FileSyncDal.RemoveGroupFromFolder(folderId, groupId);
+            FileSyncDal.Instance.RemoveGroupFromFolder(folderId, groupId);
             return RedirectToAction("ManageAuthorizations", new { id = folderId });
         }
 

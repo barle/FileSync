@@ -16,7 +16,31 @@ namespace FileSync.DAL
         const string FILE_INCLUDES = "AuthorizedUsers,AuthorizedGroups,ParentFolder";
         const string GROUP_INCLUDES = "Users,SubGroups,ParentGroups,AllowedFolders,AllowedFiles";
 
-        public static IEnumerable<FileSyncUser> GetAllUsers()
+        private static object _lockObj = new object();
+        private static FileSyncDal _instance;
+
+        public static FileSyncDal Instance
+        {
+            get
+            {
+                if (_instance != null)
+                    return _instance;
+                lock (_lockObj)
+                {
+                    if (_instance != null)
+                        return _instance;
+                    _instance = new FileSyncDal();
+                }
+                return _instance;
+            }
+        }
+
+        private FileSyncDal()
+        {
+
+        }
+
+        public IEnumerable<FileSyncUser> GetAllUsers()
         {
             using (var db = new FileSyncDbContext())
             {
@@ -26,7 +50,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<FileSyncUser> GetUsersBySearch(UserSearchParams searchParams)
+        public IEnumerable<FileSyncUser> GetUsersBySearch(UserSearchParams searchParams)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -43,7 +67,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static File GetFile(IIdentity identity, string fileId)
+        public File GetFile(IIdentity identity, string fileId)
         {
             using(var db = new FileSyncDbContext())
             {
@@ -55,7 +79,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static Folder GetFolder(IIdentity identity, string folderId)
+        public Folder GetFolder(IIdentity identity, string folderId)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -67,7 +91,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<File> GetAllFiles(IIdentity identity)
+        public IEnumerable<File> GetAllFiles(IIdentity identity)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -77,7 +101,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<Folder> GetAllFolders(IIdentity identity)
+        public IEnumerable<Folder> GetAllFolders(IIdentity identity)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -87,7 +111,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<Folder> GetRootFolders(IIdentity identity)
+        public IEnumerable<Folder> GetRootFolders(IIdentity identity)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -99,7 +123,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddFile(File file)
+        public void AddFile(File file)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -108,7 +132,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddFiles(IEnumerable<File> files)
+        public void AddFiles(IEnumerable<File> files)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -117,7 +141,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void SaveEditFile(File file)
+        public void SaveEditFile(File file)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -126,7 +150,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveFile(File file)
+        public void RemoveFile(File file)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -135,7 +159,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddFolder(Folder folder)
+        public void AddFolder(Folder folder)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -143,7 +167,8 @@ namespace FileSync.DAL
                 db.SaveChanges();
             }
         }
-        public static void AddFolders(IEnumerable<Folder> folders)
+
+        public void AddFolders(IEnumerable<Folder> folders)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -152,7 +177,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void SaveEditFolder(Folder folder)
+        public void SaveEditFolder(Folder folder)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -161,7 +186,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveFolder(string folderId)
+        public void RemoveFolder(string folderId)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -177,7 +202,7 @@ namespace FileSync.DAL
             }
         }
 
-        private static void GetAllFoldersInHirarchy(Folder folder, List<Folder> allFolders, List<Folder> foldersToRemove)
+        private void GetAllFoldersInHirarchy(Folder folder, List<Folder> allFolders, List<Folder> foldersToRemove)
         {
             var subFolders = allFolders.Where(f => f.ParentFolderId == folder.Id).ToList();
             var diffedFolders = subFolders.Except(foldersToRemove);
@@ -191,7 +216,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveUserFromGroup(string groupId, string userId)
+        public void RemoveUserFromGroup(string groupId, string userId)
         {
             if (string.IsNullOrEmpty(groupId) || string.IsNullOrEmpty(userId))
                 return;
@@ -213,7 +238,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddUserToGroup(string groupId, string userId)
+        public void AddUserToGroup(string groupId, string userId)
         {
             if (string.IsNullOrEmpty(groupId) || string.IsNullOrEmpty(userId))
                 return;
@@ -235,7 +260,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveUserFromFolder(string folderId, string userId)
+        public void RemoveUserFromFolder(string folderId, string userId)
         {
             if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(userId))
                 return;
@@ -257,7 +282,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddUserToFolder(string folderId, string userId)
+        public void AddUserToFolder(string folderId, string userId)
         {
             if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(userId))
                 return;
@@ -279,7 +304,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveGroupFromFolder(string folderId, string groupId)
+        public void RemoveGroupFromFolder(string folderId, string groupId)
         {
             if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(groupId))
                 return;
@@ -301,7 +326,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddGroupToFolder(string folderId, string groupId)
+        public void AddGroupToFolder(string folderId, string groupId)
         {
             if (string.IsNullOrEmpty(folderId) || string.IsNullOrEmpty(groupId))
                 return;
@@ -323,7 +348,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static Group GetGroup(string groupId)
+        public Group GetGroup(string groupId)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -334,7 +359,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<Group> GetAllGroups()
+        public IEnumerable<Group> GetAllGroups()
         {
             using (var db = new FileSyncDbContext())
             {
@@ -344,7 +369,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<Group> GetGroupsBySearch(GroupSearchParams searchParams)
+        public IEnumerable<Group> GetGroupsBySearch(GroupSearchParams searchParams)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -361,7 +386,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void AddGroup(Group group)
+        public void AddGroup(Group group)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -371,7 +396,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void SaveEditGroup(Group group)
+        public void SaveEditGroup(Group group)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -380,7 +405,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static void RemoveGroup(string groupId)
+        public void RemoveGroup(string groupId)
         {
             using (var db = new FileSyncDbContext())
             {
@@ -395,7 +420,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<object> GetFilesPerDays(int daysBack)
+        public IEnumerable<object> GetFilesPerDays(int daysBack)
         {
             var dateBack = DateTime.Now.AddDays(-daysBack).Date;
             using (var db = new FileSyncDbContext())
@@ -417,7 +442,7 @@ namespace FileSync.DAL
             }
         }
 
-        public static IEnumerable<object> GetFoldersSizes()
+        public IEnumerable<object> GetFoldersSizes()
         {
             using (var db = new FileSyncDbContext())
             {
@@ -428,11 +453,11 @@ namespace FileSync.DAL
             }
         }
 
-        private static IEnumerable<T> GetAuthorized<T>(IIdentity identity, IEnumerable<T> itemsToAuthorize) where T : IAuthorizableItem
+        private IEnumerable<T> GetAuthorized<T>(IIdentity identity, IEnumerable<T> itemsToAuthorize) where T : IAuthorizableItem
         {
             if (identity == null) return Enumerable.Empty<T>();
 
-            var authorizedItems = itemsToAuthorize.Where(item => ItemAuthorizer.IsAuthorized(identity, item)).ToList();
+            var authorizedItems = itemsToAuthorize.Where(item => ItemAuthorizer.Instance.IsAuthorized(identity, item)).ToList();
             return authorizedItems;
         }
     }

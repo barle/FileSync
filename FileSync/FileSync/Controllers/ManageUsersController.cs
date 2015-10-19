@@ -19,7 +19,7 @@ namespace FileSync.Controllers
 
         public ActionResult Index()
         {
-            return View(FileSyncDal.GetAllUsers());
+            return View(FileSyncDal.Instance.GetAllUsers());
         }
 
         public ActionResult Details(string id)

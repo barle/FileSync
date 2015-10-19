@@ -12,7 +12,31 @@ namespace FileSync.Authorization
 {
     public class ItemAuthorizer
     {
-        public static bool IsAuthorized(IIdentity identity, IAuthorizableItem item)
+        private static object _lockObj = new object();
+        private static ItemAuthorizer _instance;
+
+        public static ItemAuthorizer Instance
+        {
+            get
+            {
+                if (_instance != null)
+                    return _instance;
+                lock (_lockObj)
+                {
+                    if (_instance != null)
+                        return _instance;
+                    _instance = new ItemAuthorizer();
+                }
+                return _instance;
+            }
+        }
+
+        private ItemAuthorizer()
+        {
+
+        }
+
+        public bool IsAuthorized(IIdentity identity, IAuthorizableItem item)
         {
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var user = userManager.FindById(identity.GetUserId());
@@ -28,8 +52,7 @@ namespace FileSync.Authorization
             return CheckIfItemParentFoldersAllowed(user, item.ParentFolder);
         }
 
-
-        private static bool CheckIfItemAllowed(FileSyncUser user, IAuthorizableItem item)
+        private bool CheckIfItemAllowed(FileSyncUser user, IAuthorizableItem item)
         {
             if (item == null || user == null) 
                 return false;
@@ -40,7 +63,7 @@ namespace FileSync.Authorization
             return CheckIfUserGroupsAllowed(user.UserGroups, item, new List<Group>());
         }
 
-        private static bool CheckIfItemParentFoldersAllowed(FileSyncUser user, Folder parentFolder)
+        private bool CheckIfItemParentFoldersAllowed(FileSyncUser user, Folder parentFolder)
         {
             if (user == null || parentFolder == null)
                 return false;
@@ -51,7 +74,7 @@ namespace FileSync.Authorization
             return CheckIfItemParentFoldersAllowed(user, parentFolder.ParentFolder);
         }
 
-        private static bool CheckIfUserGroupsAllowed(ICollection<Group> groups, IAuthorizableItem item, ICollection<Group> checkedGroups)
+        private bool CheckIfUserGroupsAllowed(ICollection<Group> groups, IAuthorizableItem item, ICollection<Group> checkedGroups)
         {
             if (item == null || groups == null) 
                 return false;
