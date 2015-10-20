@@ -15,6 +15,7 @@ namespace FileSync.DAL
         const string FOLDER_INCLUDES = "Files,SubFolders,AuthorizedUsers,AuthorizedGroups,ParentFolder";
         const string FILE_INCLUDES = "AuthorizedUsers,AuthorizedGroups,ParentFolder";
         const string GROUP_INCLUDES = "Users,SubGroups,ParentGroups,AllowedFolders,AllowedFiles";
+        const string USER_INCLUDES = "UserGroups";
 
         private static object _lockObj = new object();
         private static FileSyncDal _instance;
@@ -162,7 +163,7 @@ namespace FileSync.DAL
         {
             using (var db = new FileSyncDbContext())
             {
-                var rootFolders = (from f in db.Folders
+                var rootFolders = (from f in db.Folders.Includes(FOLDER_INCLUDES)
                                    where f.ParentFolderId == null
                                    select f).ToList();
                 var authorizedFolders = GetAuthorized<Folder>(identity, rootFolders);
@@ -246,6 +247,17 @@ namespace FileSync.DAL
 
                 folder.AuthorizedUsers.Remove(user);
                 db.SaveChanges();
+            }
+        }
+
+        public FileSyncUser GetDbUser(string userId)
+        {
+            using (var db = new FileSyncDbContext())
+            {
+                var user = (from u in db.Users.Include("UserGroups").Include("AllowedFolders").Include("AllowedFiles")
+                                   where u.Id == userId
+                                   select u).FirstOrDefault();
+                return user;
             }
         }
 

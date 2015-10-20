@@ -7,6 +7,7 @@ using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
+using FileSync.DAL;
 
 namespace FileSync.Authorization
 {
@@ -39,17 +40,20 @@ namespace FileSync.Authorization
         public bool IsAuthorized(IIdentity identity, IAuthorizableItem item)
         {
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var user = userManager.FindById(identity.GetUserId());
-            if (user == null) 
+            var identityUser = userManager.FindById(identity.GetUserId());
+            if (identityUser == null) 
+                return false;
+            var dbUser = FileSyncDal.Instance.GetDbUser(identityUser.Id);
+            if (dbUser == null)
                 return false;
 
-            if (userManager.IsInRole(user.Id, "Admin")) 
+            if (userManager.IsInRole(dbUser.Id, "Admin")) 
                 return true;
 
-            if (CheckIfItemAllowed(user, item))
+            if (CheckIfItemAllowed(dbUser, item))
                 return true;
 
-            return CheckIfItemParentFoldersAllowed(user, item.ParentFolder);
+            return CheckIfItemParentFoldersAllowed(dbUser, item.ParentFolder);
         }
 
         private bool CheckIfItemAllowed(FileSyncUser user, IAuthorizableItem item)

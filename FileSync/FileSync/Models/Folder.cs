@@ -17,7 +17,7 @@ namespace FileSync.Models
         }
         public string Id { get; set; }
         public string Name { get; set; }
-        public Folder ParentFolder { get; set; }
+        public virtual Folder ParentFolder { get; set; }
         public string Path { get; set; }
 
         [DisplayName("Parent Folder")]
@@ -27,9 +27,9 @@ namespace FileSync.Models
 
         public long Size { get; set; }
 
-        public ICollection<Folder> SubFolders { get; set; }
-        public ICollection<File> Files { get; set; }
-        public ICollection<FileSyncUser> AuthorizedUsers { get; set; }
-        public ICollection<Group> AuthorizedGroups { get; set; }
+        public virtual ICollection<Folder> SubFolders { get; set; }
+        public virtual ICollection<File> Files { get; set; }
+        public virtual ICollection<FileSyncUser> AuthorizedUsers { get; set; }
+        public virtual ICollection<Group> AuthorizedGroups { get; set; }
     }
 }
